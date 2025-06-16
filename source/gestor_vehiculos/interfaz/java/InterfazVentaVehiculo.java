@@ -1,4 +1,4 @@
-package venta_vehiculos.interfaz.java;
+package gestor_vehiculos.interfaz.java;
 
 public interface InterfazVentaVehiculo {
 
