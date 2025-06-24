@@ -45,4 +45,21 @@ public class PanelListaVehiculos extends JPanel {
         
         add(new JScrollPane(listaVehiculos), BorderLayout.CENTER);
     }
+    
+    public void cargarVehiculos() {
+        modeloLista.clear();
+        try {
+            new VehiculoDAO().obtenerTodosVehiculos().forEach(v -> {
+                modeloLista.addElement(v.getPlaca() + " - " + v.getMarca() + " " + v.getModelo());
+            });
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, 
+                "Error al cargar los vehiculos: " + e.getMessage(), 
+                "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public void setPanelDetalle(PanelDetallesVehiculo panelDetalle) {
+        this.panelDetalle = panelDetalle;
+    }
 }
