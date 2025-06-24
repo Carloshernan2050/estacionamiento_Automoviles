@@ -2,6 +2,8 @@ package Interfaz;
 
 import java.awt.BorderLayout;
 import java.sql.SQLException;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
@@ -11,16 +13,20 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 
+import DAO.EstacionamientoDAO;
 import DAO.VehiculoDAO;
+import mundo.Estacionamiento;
+import mundo.Vehiculo;
 
 public class PanelListaVehiculos extends JPanel {
     private JList<String> listaVehiculos;
     private DefaultListModel<String> modeloLista;
-    private PanelDetallesVehiculo panelDetalle;
+    private PanelDetalleVehiculo panelDetalle;
 
     public PanelListaVehiculos() {
         configurarPanel();
-        inicializarCampos();
+        inicializarComponentes();
+        cargarVehiculos();
     }
 
     private void configurarPanel() {
@@ -28,7 +34,7 @@ public class PanelListaVehiculos extends JPanel {
         setBorder(BorderFactory.createTitledBorder("Vehículos Registrados"));
     }
 
-    private void inicializarCampos() {
+    private void inicializarComponentes() {
         modeloLista = new DefaultListModel<>();
         listaVehiculos = new JList<>(modeloLista);
         listaVehiculos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -45,21 +51,29 @@ public class PanelListaVehiculos extends JPanel {
         
         add(new JScrollPane(listaVehiculos), BorderLayout.CENTER);
     }
-    
+
     public void cargarVehiculos() {
         modeloLista.clear();
         try {
-            new VehiculoDAO().obtenerTodosVehiculos().forEach(v -> {
-                modeloLista.addElement(v.getPlaca() + " - " + v.getMarca() + " " + v.getModelo());
-            });
+            VehiculoDAO vDao = new VehiculoDAO();
+            EstacionamientoDAO eDao = new EstacionamientoDAO();
+            
+            List<Vehiculo> vehiculos = vDao.obtenerTodosVehiculos();
+            for (Vehiculo v : vehiculos) {
+                Estacionamiento e = eDao.buscarEstacionamientoPorPlaca(v.getPlaca());
+                String estado = (e != null && e.getFechaRetiro() == null) 
+                    ? " - Estacionado (" + e.getFechaIngreso().format(DateTimeFormatter.ofPattern("HH:mm")) + ")"
+                    : "";
+                modeloLista.addElement(v.getPlaca() + " - " + v.getMarca() + " " + v.getModelo() + estado);
+            }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, 
-                "Error al cargar los vehiculos: " + e.getMessage(), 
+                "Error al cargar vehículos: " + e.getMessage(), 
                 "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    public void setPanelDetalle(PanelDetallesVehiculo panelDetalle) {
+    public void setPanelDetalle(PanelDetalleVehiculo panelDetalle) {
         this.panelDetalle = panelDetalle;
     }
 }

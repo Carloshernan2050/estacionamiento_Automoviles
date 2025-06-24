@@ -36,14 +36,12 @@ public class VehiculoDAO {
              ResultSet rs = st.executeQuery(sql)) {
             
             while (rs.next()) {
-                Vehiculo v = new Vehiculo(
+                vehiculos.add(new Vehiculo(
                     rs.getString("marca"),
                     rs.getString("modelo"),
                     rs.getString("placa"),
                     rs.getString("propietario")
-                );
-                v.setImagenUrl(rs.getString("imagen_url"));
-                vehiculos.add(v);
+                ));
             }
         }
         return vehiculos;

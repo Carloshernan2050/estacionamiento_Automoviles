@@ -10,9 +10,6 @@ public class Estacionamiento {
     private Vehiculo vehiculo;
 
     public Estacionamiento(LocalDateTime fechaIngreso, int numParqueo, Vehiculo vehiculo, LocalDateTime fechaRetiro) {
-        if (fechaIngreso == null) {
-            throw new IllegalArgumentException("La fecha de ingreso no puede ser nula");
-        }
         this.fechaIngreso = fechaIngreso;
         this.numParqueo = numParqueo;
         this.vehiculo = vehiculo;
@@ -32,7 +29,7 @@ public class Estacionamiento {
     public Vehiculo getVehiculo() { return vehiculo; }
     public void setVehiculo(Vehiculo vehiculo) { this.vehiculo = vehiculo; }
 
-    // Duración entre ingreso y retiro (si el vehículo ya fue retirado)
+    // Calcula la duración total si ya se retiró
     public Duration calcularDuracionTotal() {
         if (fechaIngreso != null && fechaRetiro != null) {
             return Duration.between(fechaIngreso, fechaRetiro);
@@ -40,11 +37,22 @@ public class Estacionamiento {
         return null;
     }
 
-    // Duración desde el ingreso hasta ahora (si el vehículo sigue estacionado)
+    // Calcula el tiempo desde el ingreso hasta ahora
     public Duration calcularTiempoEnParqueo() {
         if (fechaIngreso != null && fechaRetiro == null) {
             return Duration.between(fechaIngreso, LocalDateTime.now());
         }
         return null;
+    }
+
+    // Retorna la duración formateada como texto: "X h Y min"
+    public String getDuracionComoTexto() {
+        Duration duracion = fechaRetiro != null ? calcularDuracionTotal() : calcularTiempoEnParqueo();
+        if (duracion != null) {
+            long horas = duracion.toHours();
+            long minutos = duracion.toMinutes() % 60;
+            return horas + " h " + minutos + " min";
+        }
+        return "Duración no disponible";
     }
 }
