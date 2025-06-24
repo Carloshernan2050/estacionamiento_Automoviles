@@ -78,4 +78,19 @@ public class VentanaRetiroVehiculo extends JDialog {
         add(scrollResultado, BorderLayout.CENTER);
         add(panelBotones, BorderLayout.SOUTH);
     }
+    
+    private void procesarRetiro(String placa, String fechaRetiroStr, JTextArea txtResultado) {
+        try {
+        
+            if (placa.isEmpty() || fechaRetiroStr.isEmpty()) {
+                throw new IllegalArgumentException("Placa y fecha de retiro son obligatorios");
+            }
+            
+            LocalDateTime fechaRetiro;
+            try {
+                fechaRetiro = LocalDateTime.parse(fechaRetiroStr, 
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+            } catch (DateTimeParseException e) {
+                throw new IllegalArgumentException("Formato de fecha inválido (yyyy-MM-dd HH:mm)");
+            }
 }
