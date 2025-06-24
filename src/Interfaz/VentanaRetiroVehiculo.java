@@ -20,5 +20,18 @@ import javax.swing.JTextField;
 import DAO.EstacionamientoDAO;
 
 public class VentanaRetiroVehiculo extends JDialog {
+	private final PanelListaVehiculos panelLista;
 
+    public VentanaRetiroVehiculo(PanelListaVehiculos panelLista) {
+        this.panelLista = panelLista;
+        ventanaRetiro();
+    }
+
+    private void ventanaRetiro() {
+        setTitle("Retirar Vehículo");
+        setSize(450, 300);
+        setModal(true);
+        setLocationRelativeTo(null);
+        setLayout(new BorderLayout(5, 5));
+    }
 }
