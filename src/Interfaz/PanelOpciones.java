@@ -14,7 +14,7 @@ public class PanelOpciones extends JPanel {
         this.panelDetalle = panelDetalle;
         
         VentanaOpciones();
-        
+        InicializarBotones();
     }
     
     private void VentanaOpciones() {
@@ -59,12 +59,12 @@ public class PanelOpciones extends JPanel {
     }
 
     private void mostrarDialogoIngreso(ActionEvent e) {
-    	VentanaRetiroVehiculo dialogo = new VentanaRetiroVehiculo(panelLista);
+    	VentanaIngresoVehiculo  dialogo = new VentanaIngresoVehiculo (panelLista);
         dialogo.setVisible(true);
     }
 
     private void mostrarDialogoBusqueda(ActionEvent e) {
-    	VentanaRetiroVehiculo dialogo = new VentanaRetiroVehiculo();
+    	VentanaBusquedaVehiculo dialogo = new VentanaBusquedaVehiculo();
         dialogo.setVisible(true);
     }
 

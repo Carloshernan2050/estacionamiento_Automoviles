@@ -7,7 +7,7 @@ public class InterfazVehiculo extends JFrame {
 	
 	public InterfazVehiculo() {
         ventana();
-
+        Interfaz();
     }
 
     private void ventana() {
@@ -21,7 +21,7 @@ public class InterfazVehiculo extends JFrame {
  private void Interfaz() {
         
         PanelListaVehiculos panelLista = new PanelListaVehiculos();
-        PanelDetalleVehiculo panelDetalle = new PanelDetalleVehiculo();
+        PanelDetallesVehiculo panelDetalle = new PanelDetallesVehiculo();
         PanelOpciones panelOpciones = new PanelOpciones(panelLista, panelDetalle);
         
         panelLista.setPanelDetalle(panelDetalle);
