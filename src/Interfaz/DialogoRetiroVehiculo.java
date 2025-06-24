@@ -30,7 +30,6 @@ public class DialogoRetiroVehiculo extends JDialog {
     }
 
     private void inicializarComponentes() {
-        // Panel de formulario
         JPanel panelFormulario = new JPanel(new GridLayout(2, 2, 5, 5));
         panelFormulario.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
@@ -43,14 +42,12 @@ public class DialogoRetiroVehiculo extends JDialog {
         panelFormulario.add(new JLabel("Fecha Retiro:"));
         panelFormulario.add(txtFechaRetiro);
 
-        // Área de resultados
         JTextArea txtResultado = new JTextArea(5, 30);
         txtResultado.setEditable(false);
         txtResultado.setLineWrap(true);
         txtResultado.setWrapStyleWord(true);
         JScrollPane scrollResultado = new JScrollPane(txtResultado);
 
-        // Panel de botones
         JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 5));
         JButton btnRetirar = new JButton("Retirar");
         JButton btnCancelar = new JButton("Cancelar");
@@ -66,7 +63,6 @@ public class DialogoRetiroVehiculo extends JDialog {
         panelBotones.add(btnRetirar);
         panelBotones.add(btnCancelar);
 
-        // Agregar componentes al diálogo
         add(panelFormulario, BorderLayout.NORTH);
         add(scrollResultado, BorderLayout.CENTER);
         add(panelBotones, BorderLayout.SOUTH);
@@ -88,14 +84,12 @@ public class DialogoRetiroVehiculo extends JDialog {
 
             EstacionamientoDAO eDao = new EstacionamientoDAO();
 
-            // Verificar si el vehículo está actualmente estacionado
             mundo.Estacionamiento estacionamiento = eDao.buscarEstacionamientoPorPlaca(placa);
             if (estacionamiento == null || estacionamiento.getFechaRetiro() != null) {
                 txtResultado.setText("No se encontró un vehículo estacionado actualmente con la placa: " + placa);
                 return;
             }
 
-            // Continuar con el retiro
             eDao.retirarVehiculo(placa, fechaRetiro);
 
             DAO.VehiculoDAO vDao = new DAO.VehiculoDAO();

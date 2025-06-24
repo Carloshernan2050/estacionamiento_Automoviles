@@ -61,12 +61,10 @@ public class DialogoIngresoVehiculo extends JDialog {
         panelFormulario.add(new JLabel("Propietario:"));
         panelFormulario.add(txtPropietario);
 
-        // Panel principal que combina imagen y formulario
         JPanel panelPrincipal = new JPanel(new BorderLayout(10, 10));
         panelPrincipal.add(panelImagen, BorderLayout.WEST);
         panelPrincipal.add(panelFormulario, BorderLayout.CENTER);
 
-        // Panel de botones
         JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 5));
         JButton btnGuardar = new JButton("Guardar");
         JButton btnCancelar = new JButton("Cancelar");
@@ -77,7 +75,6 @@ public class DialogoIngresoVehiculo extends JDialog {
         panelBotones.add(btnGuardar);
         panelBotones.add(btnCancelar);
 
-        // Agregar componentes al diálogo
         add(panelPrincipal, BorderLayout.CENTER);
         add(panelBotones, BorderLayout.SOUTH);
     }
@@ -103,20 +100,19 @@ public class DialogoIngresoVehiculo extends JDialog {
         if (resultado == JFileChooser.APPROVE_OPTION) {
             File archivo = fileChooser.getSelectedFile();
             try {
-                // Crear directorio si no existe
                 File directorioImagenes = new File("imagenes");
                 if (!directorioImagenes.exists()) {
                     directorioImagenes.mkdir();
                 }
                 
-                // Generar nombre único para la imagen
+                
                 String nombreArchivo = "vehiculo_" + System.currentTimeMillis() + "." + getExtension(archivo);
                 File destino = new File("imagenes/" + nombreArchivo);
                 
-                // Copiar la imagen al directorio
+                
                 Files.copy(archivo.toPath(), destino.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 
-                // Mostrar la imagen
+                
                 BufferedImage img = ImageIO.read(destino);
                 if (img != null) {
                     ImageIcon icono = new ImageIcon(redimensionarImagen(img, 200, 150));
@@ -167,26 +163,26 @@ public class DialogoIngresoVehiculo extends JDialog {
             return;
         }
 
-        // Crear vehículo con la imagen (o la por defecto si no se seleccionó)
+        
         Vehiculo v = new Vehiculo(marca, modelo, placa, propietario);
         v.setImagenUrl(rutaImagenSeleccionada != null ? rutaImagenSeleccionada : "imagenes/vehiculo.png");
 
-        // Insertar en la base de datos
+        
         VehiculoDAO vDao = new VehiculoDAO();
         vDao.insertarVehiculo(v);
 
-        // --- NUEVO: Registrar el ingreso al estacionamiento ---
-        int numParqueo = asignarNumeroParqueo(); // Implementa este método según tu lógica
+        
+        int numParqueo = asignarNumeroParqueo(); 
         mundo.Estacionamiento e = new mundo.Estacionamiento(
             java.time.LocalDateTime.now(),
             numParqueo,
             v,
-            null // fechaRetiro es null al ingresar
+            null 
         );
         DAO.EstacionamientoDAO eDao = new DAO.EstacionamientoDAO();
         eDao.insertarEstacionamiento(e);
 
-        // Actualizar lista y cerrar diálogo
+        
         panelLista.cargarVehiculos();
         dispose();
 
@@ -200,10 +196,7 @@ public class DialogoIngresoVehiculo extends JDialog {
     }
 }
 
-// Método de ejemplo para asignar número de parqueadero
 private int asignarNumeroParqueo() {
-    // Puedes implementar aquí la lógica para asignar el número de parqueadero disponible
-    // Por ejemplo, retornar un número fijo o consultar la base de datos por el primer lugar libre
-    return 1; // Cambia esto por tu lógica real
+    return 1; 
 }
 }
