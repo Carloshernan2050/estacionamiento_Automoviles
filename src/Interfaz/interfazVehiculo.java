@@ -33,4 +33,17 @@ public class InterfazVehiculo extends JFrame {
         add(panelCentral, BorderLayout.CENTER);
         add(panelOpciones, BorderLayout.SOUTH);
  	}
+ 
+ public static void main(String[] args) {
+     SwingUtilities.invokeLater(() -> {
+         try {
+             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+             new InterfazVehiculo().setVisible(true);
+         } catch (Exception e) {
+             JOptionPane.showMessageDialog(null, 
+                 "Error al ejecutar: " + e.getMessage(), 
+                 "Error", JOptionPane.ERROR_MESSAGE);
+         }
+     });
+ }
 }
