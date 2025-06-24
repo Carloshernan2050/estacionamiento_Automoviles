@@ -78,7 +78,7 @@ public class VentanaRetiroVehiculo extends JDialog {
         add(scrollResultado, BorderLayout.CENTER);
         add(panelBotones, BorderLayout.SOUTH);
     }
-    
+
     private void procesarRetiro(String placa, String fechaRetiroStr, JTextArea txtResultado) {
         try {
         
@@ -93,4 +93,22 @@ public class VentanaRetiroVehiculo extends JDialog {
             } catch (DateTimeParseException e) {
                 throw new IllegalArgumentException("Formato de fecha inválido (yyyy-MM-dd HH:mm)");
             }
+            
+        
+            EstacionamientoDAO eDao = new EstacionamientoDAO();
+            eDao.retirarVehiculo(placa, fechaRetiro);
+            
+       
+            StringBuilder sb = new StringBuilder();
+            sb.append("Vehículo retirado correctamente\n\n");
+            sb.append(String.format("%-12s: %s%n", "Placa", placa));
+            sb.append(String.format("%-12s: %s%n", "Fecha retiro", fechaRetiroStr));
+            
+            txtResultado.setText(sb.toString());
+            panelLista.cargarVehiculos();
+        } catch (IllegalArgumentException | SQLException e) {
+            txtResultado.setText("Error al retirar vehículo: " + e.getMessage());
+        }
+    }
 }
+        
