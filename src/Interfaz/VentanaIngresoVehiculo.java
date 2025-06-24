@@ -139,4 +139,17 @@ private void InicializarCampos() {
         }
         return "";
     }
+	
+	private Image redimensionarImagen(String ruta, int ancho, int alto) {
+        try {
+            BufferedImage img = ImageIO.read(new File(ruta));
+            return img.getScaledInstance(ancho, alto, Image.SCALE_SMOOTH);
+        } catch (IOException e) {
+            return new BufferedImage(ancho, alto, BufferedImage.TYPE_INT_ARGB);
+        }
+    }
+
+    private Image redimensionarImagen(BufferedImage img, int ancho, int alto) {
+        return img.getScaledInstance(ancho, alto, Image.SCALE_SMOOTH);
+    }
 }
