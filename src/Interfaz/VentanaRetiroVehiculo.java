@@ -25,6 +25,7 @@ public class VentanaRetiroVehiculo extends JDialog {
     public VentanaRetiroVehiculo(PanelListaVehiculos panelLista) {
         this.panelLista = panelLista;
         ventanaRetiro();
+        InicializarCampos();
     }
 
     private void ventanaRetiro() {
@@ -33,5 +34,48 @@ public class VentanaRetiroVehiculo extends JDialog {
         setModal(true);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout(5, 5));
+    }
+    
+    private void InicializarCampos() {
+        
+        JPanel panelFormulario = new JPanel(new GridLayout(2, 2, 5, 5));
+        panelFormulario.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        
+        JTextField txtPlaca = new JTextField();
+        JTextField txtFechaRetiro = new JTextField(
+            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+        
+        panelFormulario.add(new JLabel("Placa:"));
+        panelFormulario.add(txtPlaca);
+        panelFormulario.add(new JLabel("Fecha Retiro:"));
+        panelFormulario.add(txtFechaRetiro);
+        
+ 
+        JTextArea txtResultado = new JTextArea(5, 30);
+        txtResultado.setEditable(false);
+        txtResultado.setLineWrap(true);
+        txtResultado.setWrapStyleWord(true);
+        JScrollPane scrollResultado = new JScrollPane(txtResultado);
+        
+
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 5));
+        JButton btnRetirar = new JButton("Retirar");
+        JButton btnCancelar = new JButton("Cancelar");
+        
+        btnRetirar.addActionListener(e -> procesarRetiro(
+            txtPlaca.getText(),
+            txtFechaRetiro.getText(),
+            txtResultado
+        ));
+        
+        btnCancelar.addActionListener(e -> dispose());
+        
+        panelBotones.add(btnRetirar);
+        panelBotones.add(btnCancelar);
+        
+ 
+        add(panelFormulario, BorderLayout.NORTH);
+        add(scrollResultado, BorderLayout.CENTER);
+        add(panelBotones, BorderLayout.SOUTH);
     }
 }
