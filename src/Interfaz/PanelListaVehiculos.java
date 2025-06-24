@@ -20,9 +20,29 @@ public class PanelListaVehiculos extends JPanel {
 
     public PanelListaVehiculos() {
         configurarPanel();
+        inicializarCampos();
     }
 
     private void configurarPanel() {
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createTitledBorder("Vehículos Registrados"));
     }
+
+    private void inicializarCampos() {
+        modeloLista = new DefaultListModel<>();
+        listaVehiculos = new JList<>(modeloLista);
+        listaVehiculos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
+        listaVehiculos.addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting() && panelDetalle != null) {
+                String seleccion = listaVehiculos.getSelectedValue();
+                if (seleccion != null) {
+                    String placa = seleccion.split(" - ")[0];
+                    panelDetalle.mostrarDetalle(placa);
+                }
+            }
+        });
+        
+        add(new JScrollPane(listaVehiculos), BorderLayout.CENTER);
+    }
+}
