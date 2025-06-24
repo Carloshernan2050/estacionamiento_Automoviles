@@ -98,5 +98,45 @@ private void InicializarCampos() {
 	            return "Imágenes (*.jpg, *.png, *.gif)";
 	        }
 	    });
+	    
+	    int resultado = fileChooser.showOpenDialog(this);
+	    if (resultado == JFileChooser.APPROVE_OPTION) {
+	        File archivo = fileChooser.getSelectedFile();
+	        try {
+	            // Crear directorio si no existe
+	            File directorioImagenes = new File("imagenes");
+	            if (!directorioImagenes.exists()) {
+	                directorioImagenes.mkdir();
+	            }
+	            
+	        
+	            String nombreArchivo = "vehiculo_" + System.currentTimeMillis() + "." + getExtension(archivo);
+	            File destino = new File("imagenes/" + nombreArchivo);
+	            
+	            // Copiar la imagen al directorio
+	            Files.copy(archivo.toPath(), destino.toPath(), StandardCopyOption.REPLACE_EXISTING);
+	            
+	           
+	            BufferedImage img = ImageIO.read(destino);
+	            if (img != null) {
+	                ImageIcon icono = new ImageIcon(redimensionarImagen(img, 200, 150));
+	                lblImagen.setIcon(icono);
+	                rutaImagenSeleccionada = "imagenes/" + nombreArchivo;
+	            }
+	        } catch (IOException ex) {
+	            JOptionPane.showMessageDialog(this, 
+	                "Error al copiar la imagen: " + ex.getMessage(),
+	                "Error", JOptionPane.ERROR_MESSAGE);
+	        }
+	    }
 	}
+	
+	private String getExtension(File f) {
+        String name = f.getName();
+        int lastDot = name.lastIndexOf(".");
+        if (lastDot > 0) {
+            return name.substring(lastDot + 1).toLowerCase();
+        }
+        return "";
+    }
 }
