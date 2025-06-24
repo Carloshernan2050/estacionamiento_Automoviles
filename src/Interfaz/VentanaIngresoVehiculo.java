@@ -103,7 +103,7 @@ private void InicializarCampos() {
 	    if (resultado == JFileChooser.APPROVE_OPTION) {
 	        File archivo = fileChooser.getSelectedFile();
 	        try {
-	            // Crear directorio si no existe
+	
 	            File directorioImagenes = new File("imagenes");
 	            if (!directorioImagenes.exists()) {
 	                directorioImagenes.mkdir();
@@ -113,7 +113,7 @@ private void InicializarCampos() {
 	            String nombreArchivo = "vehiculo_" + System.currentTimeMillis() + "." + getExtension(archivo);
 	            File destino = new File("imagenes/" + nombreArchivo);
 	            
-	            // Copiar la imagen al directorio
+	    
 	            Files.copy(archivo.toPath(), destino.toPath(), StandardCopyOption.REPLACE_EXISTING);
 	            
 	           
@@ -152,4 +152,39 @@ private void InicializarCampos() {
     private Image redimensionarImagen(BufferedImage img, int ancho, int alto) {
         return img.getScaledInstance(ancho, alto, Image.SCALE_SMOOTH);
     }
+    
+    private void guardarVehiculo() {
+        try {
+            String placa = txtPlaca.getText().trim();
+            String marca = txtMarca.getText().trim();
+            String modelo = txtModelo.getText().trim();
+            String propietario = txtPropietario.getText().trim();
+
+            if (placa.isEmpty() || marca.isEmpty() || modelo.isEmpty() || propietario.isEmpty()) {
+                JOptionPane.showMessageDialog(this, 
+                    "Todos los campos son obligatorios", 
+                    "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            Vehiculo v = new Vehiculo(marca, modelo, placa, propietario);
+            v.setImagenUrl(rutaImagenSeleccionada != null ? rutaImagenSeleccionada : "imagenes/vehiculo.png");
+
+
+            VehiculoDAO vDao = new VehiculoDAO();
+            vDao.insertarVehiculo(v);
+            
+            panelLista.cargarVehiculos();
+            dispose();
+            
+            JOptionPane.showMessageDialog(this, 
+                "Vehículo registrado exitosamente", 
+                "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, 
+                "Error al guardar vehículo: " + ex.getMessage(),
+                "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
 }
