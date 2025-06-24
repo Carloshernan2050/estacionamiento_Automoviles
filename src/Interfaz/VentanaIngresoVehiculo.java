@@ -23,7 +23,7 @@ public class VentanaIngresoVehiculo extends JDialog {
     public VentanaIngresoVehiculo(PanelListaVehiculos panelLista) {
         this.panelLista = panelLista;
         VentanaIngreso();
-
+        InicializarCampos();
     }
     private void VentanaIngreso() {
         setTitle("Ingresar Vehículo");
@@ -32,4 +32,71 @@ public class VentanaIngresoVehiculo extends JDialog {
         setLocationRelativeTo(null);
         setLayout(new BorderLayout(10, 10));
     }
+    
+private void InicializarCampos() {
+        
+        JPanel panelImagen = new JPanel(new BorderLayout());
+        lblImagen = new JLabel(new ImageIcon(redimensionarImagen("imagenes/vehiculo.png", 200, 150)));
+        panelImagen.add(lblImagen, BorderLayout.CENTER);
+        
+        JButton btnSeleccionarImagen = new JButton("Seleccionar Imagen");
+        btnSeleccionarImagen.addActionListener(this::seleccionarImagen);
+        panelImagen.add(btnSeleccionarImagen, BorderLayout.SOUTH);
+
+        
+        JPanel panelFormulario = new JPanel(new GridLayout(4, 2, 5, 5));
+        panelFormulario.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        
+        txtPlaca = new JTextField();
+        txtMarca = new JTextField();
+        txtModelo = new JTextField();
+        txtPropietario = new JTextField();
+        
+        panelFormulario.add(new JLabel("Placa:"));
+        panelFormulario.add(txtPlaca);
+        panelFormulario.add(new JLabel("Marca:"));
+        panelFormulario.add(txtMarca);
+        panelFormulario.add(new JLabel("Modelo:"));
+        panelFormulario.add(txtModelo);
+        panelFormulario.add(new JLabel("Propietario:"));
+        panelFormulario.add(txtPropietario);
+
+        
+        JPanel panelPrincipal = new JPanel(new BorderLayout(10, 10));
+        panelPrincipal.add(panelImagen, BorderLayout.WEST);
+        panelPrincipal.add(panelFormulario, BorderLayout.CENTER);
+
+       
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 5));
+        JButton btnGuardar = new JButton("Guardar");
+        JButton btnCancelar = new JButton("Cancelar");
+        
+        btnGuardar.addActionListener(e -> guardarVehiculo());
+        btnCancelar.addActionListener(e -> dispose());
+        
+        panelBotones.add(btnGuardar);
+        panelBotones.add(btnCancelar);
+
+        
+        add(panelPrincipal, BorderLayout.CENTER);
+        add(panelBotones, BorderLayout.SOUTH);
+    }
+	
+	private void seleccionarImagen(ActionEvent e) {
+	    JFileChooser fileChooser = new JFileChooser();
+	    fileChooser.setDialogTitle("Seleccionar imagen del vehículo");
+	    
+	    fileChooser.setAcceptAllFileFilterUsed(false);
+	    fileChooser.addChoosableFileFilter(new javax.swing.filechooser.FileFilter() {
+	        public boolean accept(File f) {
+	            if (f.isDirectory()) return true;
+	            String name = f.getName().toLowerCase();
+	            return name.endsWith(".jpg") || name.endsWith(".jpeg") || 
+	                   name.endsWith(".png") || name.endsWith(".gif");
+	        }
+	        public String getDescription() {
+	            return "Imágenes (*.jpg, *.png, *.gif)";
+	        }
+	    });
+	}
 }
