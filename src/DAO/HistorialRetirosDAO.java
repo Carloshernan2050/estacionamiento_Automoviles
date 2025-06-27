@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import ConexionDB.ConexionDB;
 
 public class HistorialRetirosDAO {
-
+	
+	//guarda un registro en la tabla de historial de retiros
     public void insertarRetiro(String placa, Timestamp fechaIngreso, Timestamp fechaRetiro) throws SQLException {
         String sql = "INSERT INTO historialretiros (placa, fecha_ingreso, fecha_retiro) VALUES (?, ?, ?)";
 
@@ -17,7 +18,8 @@ public class HistorialRetirosDAO {
             ps.executeUpdate();
         }
     }
-
+    
+  //obtiene el historial de la tabla de historial de registros
     public ArrayList<String> obtenerHistorial() throws SQLException {
         ArrayList<String> historial = new ArrayList<>();
         String sql = "SELECT * FROM historialretiros ORDER BY fecha_retiro DESC";

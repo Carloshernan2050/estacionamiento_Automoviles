@@ -11,7 +11,8 @@ import ConexionDB.ConexionDB;
 import mundo.Estacionamiento;
 
 public class EstacionamientoDAO {
-
+	
+	//inserta registro en la tabla de estacionamientos
     public void insertarEstacionamiento(Estacionamiento e) throws SQLException {
         String sql = "INSERT INTO estacionamientos (placa, fecha_ingreso, fecha_retiro, numero_lugar) VALUES (?, ?, ?, ?)";
 
@@ -25,7 +26,8 @@ public class EstacionamientoDAO {
             ps.executeUpdate();
         }
     }
-
+    
+  //cambia el estado del vehiculo
     public void retirarVehiculo(String placa, LocalDateTime fechaRetiro) throws SQLException {
         String sqlUpdate = "UPDATE estacionamientos SET fecha_retiro = ? WHERE placa = ? AND fecha_retiro IS NULL";
 
@@ -53,7 +55,7 @@ public class EstacionamientoDAO {
         }
     }
 
-
+  //inserta un registtro del retiro de unn vehiculo
     private void registrarRetiro(String placa, LocalDateTime fechaIngreso, LocalDateTime fechaRetiro) throws SQLException {
         String sql = "INSERT INTO historialretiros (placa, fecha_ingreso, fecha_retiro) VALUES (?, ?, ?)";
 
@@ -67,7 +69,7 @@ public class EstacionamientoDAO {
         }
     }
 
-
+  //busca el ultimo registro de un vehiculo
     public Estacionamiento buscarEstacionamientoPorPlaca(String placa) throws SQLException {
         String sql = "SELECT * FROM estacionamientos WHERE placa = ? ORDER BY fecha_ingreso DESC LIMIT 1";
 
@@ -90,7 +92,7 @@ public class EstacionamientoDAO {
         }
         return null;
     }
-
+  //elimina los registros de un vehiculo
     public void eliminarEstacionamiento(String placa) throws SQLException {
         String sql = "DELETE FROM estacionamientos WHERE placa = ?";
         try (Connection con = ConexionDB.obtenerConexion();

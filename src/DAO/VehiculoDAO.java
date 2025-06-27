@@ -12,6 +12,7 @@ import ConexionDB.ConexionDB;
 import mundo.Vehiculo;
 
 public class VehiculoDAO {
+	//inserta un vehiculo en la ttabla de vehiculos
     public void insertarVehiculo(Vehiculo v) throws SQLException {
         String sql = "INSERT INTO vehiculos (placa, marca, modelo, propietario, imagen_url) VALUES (?, ?, ?, ?, ?)";
         
@@ -26,7 +27,8 @@ public class VehiculoDAO {
             ps.executeUpdate();
         }
     }
-
+    
+  //obtiene todos los vehiculos de la tabla
     public List<Vehiculo> obtenerTodosVehiculos() throws SQLException {
         List<Vehiculo> vehiculos = new ArrayList<>();
         String sql = "SELECT * FROM vehiculos";
@@ -46,7 +48,8 @@ public class VehiculoDAO {
         }
         return vehiculos;
     }
-
+    
+  //busca un vehiculo por su placa
     public Vehiculo buscarVehiculoPorPlaca(String placa) throws SQLException {
         String sql = "SELECT * FROM vehiculos WHERE placa = ?";
         
@@ -70,6 +73,7 @@ public class VehiculoDAO {
         return null;
     }
     
+  //elimina un vehiculo de la tabla de vehiculos
     public void eliminarVehiculo(String placa) throws SQLException {
         String sql = "DELETE FROM vehiculos WHERE placa = ?";
         try (Connection con = ConexionDB.obtenerConexion();

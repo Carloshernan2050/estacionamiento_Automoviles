@@ -20,20 +20,17 @@ public class InterfazPrincipal extends JFrame {
     }
 
     private void inicializarComponentes() {
-        // Crear componentes
+
         PanelListaVehiculos panelLista = new PanelListaVehiculos();
         PanelDetalleVehiculo panelDetalle = new PanelDetalleVehiculo();
         PanelOpciones panelOpciones = new PanelOpciones(panelLista, panelDetalle);
 
-        // Configurar relaciones
         panelLista.setPanelDetalle(panelDetalle);
 
-        // Panel central para lista y detalle
         JPanel panelCentral = new JPanel(new GridLayout(1, 2, 5, 5));
         panelCentral.add(panelLista);
         panelCentral.add(panelDetalle);
 
-        // Panel superior con botones de historial y actualizar lista
         JPanel panelSuperior = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JButton btnHistorial = new JButton("Ver Historial de Retiros");
         btnHistorial.addActionListener((ActionEvent e) -> {
@@ -49,7 +46,6 @@ public class InterfazPrincipal extends JFrame {
         panelSuperior.add(btnHistorial);
         panelSuperior.add(btnActualizar);
 
-        // Agregar componentes al frame
         add(panelSuperior, BorderLayout.NORTH);
         add(panelCentral, BorderLayout.CENTER);
         add(panelOpciones, BorderLayout.SOUTH);
