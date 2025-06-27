@@ -1,8 +1,6 @@
 package Interfaz;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -12,70 +10,126 @@ import javax.swing.*;
 
 import DAO.EstacionamientoDAO;
 
+/**
+ * Diálogo que permite retirar un vehículo del estacionamiento.
+ * Incluye validación, confirmación y actualización de la lista.
+ */
 public class DialogoRetiroVehiculo extends JDialog {
     private final PanelListaVehiculos panelLista;
 
+    /**
+     * Constructor que recibe el panel de lista para actualizarlo tras el retiro.
+     * 
+     * @param panelLista Panel de lista que debe actualizarse al retirar un vehículo.
+     */
     public DialogoRetiroVehiculo(PanelListaVehiculos panelLista) {
         this.panelLista = panelLista;
         configurarDialogo();
         inicializarComponentes();
     }
 
-  //configuración de la ventana
+    /**
+     * Configura la apariencia básica del diálogo.
+     */
     private void configurarDialogo() {
         setTitle("Retirar Vehículo");
-        setSize(450, 300);
-        setModal(true);
+        setSize(480, 300);
+        setModal(true); // bloquea otras ventanas hasta que se cierre
         setLocationRelativeTo(null);
-        setLayout(new BorderLayout(5, 5));
+        setLayout(new BorderLayout(8, 8));
+        getContentPane().setBackground(new Color(15, 20, 30));
     }
-    
-    private void inicializarComponentes() {
-        JPanel panelFormulario = new JPanel(new GridLayout(2, 2, 5, 5));
-        panelFormulario.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
+    /**
+     * Inicializa y organiza los componentes gráficos del diálogo.
+     */
+    private void inicializarComponentes() {
+        Font fuente = new Font("SansSerif", Font.PLAIN, 14);
+        Color fondo = new Color(25, 30, 40);
+        Color texto = Color.WHITE;
+
+        // Panel de formulario
+        JPanel panelFormulario = new JPanel(new GridLayout(2, 2, 8, 8));
+        panelFormulario.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
+        panelFormulario.setBackground(fondo);
+
+        // Etiquetas
+        JLabel lblPlaca = new JLabel("Placa:");
+        JLabel lblFecha = new JLabel("Fecha Retiro:");
+
+        // Estilo de etiquetas
+        lblPlaca.setForeground(texto);
+        lblFecha.setForeground(texto);
+        lblPlaca.setFont(fuente);
+        lblFecha.setFont(fuente);
+
+        // Campos de texto
         JTextField txtPlaca = new JTextField();
         JTextField txtFechaRetiro = new JTextField(
-                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
+        );
+        txtFechaRetiro.setFont(fuente);
+        txtFechaRetiro.setEditable(false); // evita que el usuario lo modifique
+        txtFechaRetiro.setBackground(new Color(35, 40, 50));
+        txtFechaRetiro.setForeground(Color.WHITE);
+        txtFechaRetiro.setBorder(BorderFactory.createLineBorder(new Color(60, 70, 80)));
 
-        panelFormulario.add(new JLabel("Placa:"));
+        // Agrega componentes al panel de formulario
+        panelFormulario.add(lblPlaca);
         panelFormulario.add(txtPlaca);
-        panelFormulario.add(new JLabel("Fecha Retiro:"));
+        panelFormulario.add(lblFecha);
         panelFormulario.add(txtFechaRetiro);
 
-        JTextArea txtResultado = new JTextArea(5, 30);
+        // Área para mensajes o errores
+        JTextArea txtResultado = new JTextArea(4, 30);
         txtResultado.setEditable(false);
         txtResultado.setLineWrap(true);
         txtResultado.setWrapStyleWord(true);
+        txtResultado.setBackground(fondo);
+        txtResultado.setForeground(Color.ORANGE);
+        txtResultado.setFont(new Font("Monospaced", Font.PLAIN, 13));
         JScrollPane scrollResultado = new JScrollPane(txtResultado);
 
+        // Botones
         JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 5));
+        panelBotones.setBackground(new Color(20, 25, 35));
+
         JButton btnRetirar = new JButton("Retirar");
         JButton btnCancelar = new JButton("Cancelar");
 
-        btnRetirar.addActionListener(e -> procesarRetiro(
-                txtPlaca.getText(),
-                txtFechaRetiro.getText(),
-                txtResultado
-        ));
+        btnRetirar.setFocusPainted(false);
+        btnCancelar.setFocusPainted(false);
 
+        // Acciones
+        btnRetirar.addActionListener(e -> procesarRetiro(
+            txtPlaca.getText(), txtFechaRetiro.getText(), txtResultado
+        ));
         btnCancelar.addActionListener(e -> dispose());
 
         panelBotones.add(btnRetirar);
         panelBotones.add(btnCancelar);
 
+        // Agregar a la ventana
         add(panelFormulario, BorderLayout.NORTH);
         add(scrollResultado, BorderLayout.CENTER);
         add(panelBotones, BorderLayout.SOUTH);
     }
-    
-  //retiro de un vehiculo
+
+    /**
+     * Lógica para procesar el retiro del vehículo.
+     * Valida entrada, confirma con el usuario y actualiza la base de datos.
+     *
+     * @param placa Placa del vehículo a retirar.
+     * @param fechaRetiroStr Fecha de retiro en formato texto.
+     * @param txtResultado Área de texto donde se muestran los mensajes de estado.
+     */
     private void procesarRetiro(String placa, String fechaRetiroStr, JTextArea txtResultado) {
         try {
             if (placa.isEmpty() || fechaRetiroStr.isEmpty()) {
                 throw new IllegalArgumentException("Placa y fecha de retiro son obligatorios");
             }
 
+            // Validar y convertir fecha
             LocalDateTime fechaRetiro;
             try {
                 fechaRetiro = LocalDateTime.parse(fechaRetiroStr,
@@ -84,22 +138,26 @@ public class DialogoRetiroVehiculo extends JDialog {
                 throw new IllegalArgumentException("Formato de fecha inválido (yyyy-MM-dd HH:mm)");
             }
 
-            EstacionamientoDAO eDao = new EstacionamientoDAO();
+            // Confirmación antes de proceder
+            int confirmacion = JOptionPane.showConfirmDialog(
+                this,
+                "¿Está seguro de retirar el vehículo con placa: " + placa + "?",
+                "Confirmar retiro",
+                JOptionPane.YES_NO_OPTION
+            );
 
-            mundo.Estacionamiento estacionamiento = eDao.buscarEstacionamientoPorPlaca(placa);
-            if (estacionamiento == null || estacionamiento.getFechaRetiro() != null) {
-                txtResultado.setText("No se encontró un vehículo estacionado actualmente con la placa: " + placa);
-                return;
+            if (confirmacion != JOptionPane.YES_OPTION) {
+                return; // usuario canceló
             }
 
-            eDao.retirarVehiculo(placa, fechaRetiro);
+            // Ejecutar retiro
+            EstacionamientoDAO eDao = new EstacionamientoDAO();
+            eDao.retirarVehiculoYEliminarDatos(placa, fechaRetiro);
 
-            DAO.VehiculoDAO vDao = new DAO.VehiculoDAO();
-            vDao.eliminarVehiculo(placa);
-
+            // Actualizar la lista lateral
             panelLista.cargarVehiculos();
-            
-            //crea un objeto para armar un texto
+
+            // Mostrar mensaje de éxito
             StringBuilder sb = new StringBuilder();
             sb.append("Vehículo retirado correctamente\n\n");
             sb.append(String.format("%-12s: %s%n", "Placa", placa));
@@ -107,24 +165,20 @@ public class DialogoRetiroVehiculo extends JDialog {
 
             JTextArea texto = new JTextArea(sb.toString());
             texto.setEditable(false);
-            texto.setBackground(null);
-            texto.setFont(new JLabel().getFont());
-
-            JPanel panelMensaje = new JPanel(new BorderLayout());
-            panelMensaje.add(texto, BorderLayout.CENTER);
+            texto.setBackground(new Color(245, 245, 245));
+            texto.setFont(new Font("SansSerif", Font.PLAIN, 13));
 
             JOptionPane.showMessageDialog(
-                    this,
-                    panelMensaje,
-                    "Retiro exitoso",
-                    JOptionPane.INFORMATION_MESSAGE
+                this,
+                texto,
+                "Retiro exitoso",
+                JOptionPane.INFORMATION_MESSAGE
             );
 
-            dispose();
+            dispose(); // cerrar diálogo
 
         } catch (IllegalArgumentException | SQLException e) {
             txtResultado.setText("Error al retirar vehículo: " + e.getMessage());
         }
     }
-
 }

@@ -1,8 +1,0 @@
-/**
- * 
- */
-/**
- * 
- */
-module venta_vehiculos {
-}
