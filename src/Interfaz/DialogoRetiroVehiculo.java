@@ -98,7 +98,8 @@ public class DialogoRetiroVehiculo extends JDialog {
             vDao.eliminarVehiculo(placa);
 
             panelLista.cargarVehiculos();
-
+            
+            //crea un objeto para armar un texto
             StringBuilder sb = new StringBuilder();
             sb.append("Vehículo retirado correctamente\n\n");
             sb.append(String.format("%-12s: %s%n", "Placa", placa));
