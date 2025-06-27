@@ -25,7 +25,7 @@ public class DialogoBusquedaVehiculo extends JDialog {
         configurarDialogo();
         inicializarComponentes();
     }
-
+  //configuracion de la ventana
     private void configurarDialogo() {
         setTitle("Buscar Vehículo");
         setSize(500, 400);

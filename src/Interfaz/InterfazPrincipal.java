@@ -10,7 +10,7 @@ public class InterfazPrincipal extends JFrame {
         configurarVentana();
         inicializarComponentes();
     }
-
+  //configuracion de la venttana
     private void configurarVentana() {
         setTitle("Gestión de Vehículos y Estacionamiento - Java 8");
         setSize(1200, 800);

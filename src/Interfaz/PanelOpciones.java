@@ -15,7 +15,7 @@ public class PanelOpciones extends JPanel {
         configurarPanel();
         inicializarComponentes();
     }
-
+  //configuración del panel
     private void configurarPanel() {
         setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
         setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -49,9 +49,6 @@ public class PanelOpciones extends JPanel {
     private JButton crearBoton(String texto, String icono) {
         JButton boton = new JButton(texto);
         boton.setPreferredSize(new Dimension(180, 40));
-        
-        // Aquí podrías cargar el icono si lo tienes en recursos
-        // boton.setIcon(new ImageIcon(getClass().getResource("/imagenes/" + icono)));
         
         return boton;
     }

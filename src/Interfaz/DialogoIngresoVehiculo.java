@@ -24,7 +24,7 @@ public class DialogoIngresoVehiculo extends JDialog {
         configurarDialogo();
         inicializarComponentes();
     }
-
+    //configuracion de la ventana
     private void configurarDialogo() {
         setTitle("Ingresar Vehículo");
         setSize(600, 400);
@@ -148,7 +148,8 @@ public class DialogoIngresoVehiculo extends JDialog {
     private Image redimensionarImagen(BufferedImage img, int ancho, int alto) {
         return img.getScaledInstance(ancho, alto, Image.SCALE_SMOOTH);
     }
-
+    
+    //guarda el vehiculo
     private void guardarVehiculo() {
     try {
         String placa = txtPlaca.getText().trim();
@@ -163,7 +164,7 @@ public class DialogoIngresoVehiculo extends JDialog {
             return;
         }
 
-        
+        //crea y guarda el vehiculo
         Vehiculo v = new Vehiculo(marca, modelo, placa, propietario);
         v.setImagenUrl(rutaImagenSeleccionada != null ? rutaImagenSeleccionada : "imagenes/vehiculo.png");
 

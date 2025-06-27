@@ -28,7 +28,7 @@ public class PanelListaVehiculos extends JPanel {
         inicializarComponentes();
         cargarVehiculos();
     }
-
+    
     private void configurarPanel() {
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createTitledBorder("Vehículos Registrados"));
@@ -51,7 +51,8 @@ public class PanelListaVehiculos extends JPanel {
         
         add(new JScrollPane(listaVehiculos), BorderLayout.CENTER);
     }
-
+    
+  //muestra los vehiculos 
     public void cargarVehiculos() {
         modeloLista.clear();
         try {

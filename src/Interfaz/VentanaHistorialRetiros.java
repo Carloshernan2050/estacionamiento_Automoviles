@@ -11,6 +11,7 @@ public class VentanaHistorialRetiros extends JFrame {
 
     private JTextArea txtHistorial;
 
+  //configuración de la ventana
     public VentanaHistorialRetiros() {
         setTitle("Historial de Retiros");
         setSize(500, 400);
@@ -25,7 +26,8 @@ public class VentanaHistorialRetiros extends JFrame {
         add(scroll, BorderLayout.CENTER);
         cargarHistorial();
     }
-
+    
+  //muestra el historial de retiros
     private void cargarHistorial() {
         try {
             HistorialRetirosDAO dao = new HistorialRetirosDAO();

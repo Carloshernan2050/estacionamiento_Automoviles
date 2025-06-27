@@ -21,6 +21,7 @@ public class DialogoRetiroVehiculo extends JDialog {
         inicializarComponentes();
     }
 
+  //configuración de la ventana
     private void configurarDialogo() {
         setTitle("Retirar Vehículo");
         setSize(450, 300);
@@ -28,7 +29,7 @@ public class DialogoRetiroVehiculo extends JDialog {
         setLocationRelativeTo(null);
         setLayout(new BorderLayout(5, 5));
     }
-
+    
     private void inicializarComponentes() {
         JPanel panelFormulario = new JPanel(new GridLayout(2, 2, 5, 5));
         panelFormulario.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -67,7 +68,8 @@ public class DialogoRetiroVehiculo extends JDialog {
         add(scrollResultado, BorderLayout.CENTER);
         add(panelBotones, BorderLayout.SOUTH);
     }
-
+    
+  //retiro de un vehiculo
     private void procesarRetiro(String placa, String fechaRetiroStr, JTextArea txtResultado) {
         try {
             if (placa.isEmpty() || fechaRetiroStr.isEmpty()) {
